@@ -1,17 +1,24 @@
 "use client";
 
+import { useRef } from "react";
 import Webcam from "react-webcam";
+import { useHandTracking } from "@/hooks/useHandTracking";
 
 export default function CameraPanel() {
+  const webcamRef = useRef<Webcam>(null);
+
+  // Start AI hand tracking
+  useHandTracking(webcamRef);
+
   return (
     <section>
-      <div className="flex h-[550px] items-center justify-center rounded-3xl border border-cyan-300/30 bg-zinc-900 overflow-hidden">
-
+      <div className="flex h-[550px] items-center justify-center overflow-hidden rounded-3xl border border-cyan-300/30 bg-zinc-900">
         <Webcam
+          ref={webcamRef}
           audio={false}
+          mirrored
           className="h-full w-full object-cover"
         />
-
       </div>
     </section>
   );
