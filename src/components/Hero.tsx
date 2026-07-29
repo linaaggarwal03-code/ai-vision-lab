@@ -1,5 +1,6 @@
 import FeatureCard from "./FeatureCard";
 import PrimaryButton from "./PrimaryButton";
+
 export default function Hero() {
   return (
     <section>
@@ -36,9 +37,9 @@ export default function Hero() {
 
       <div className="mt-10 flex gap-6">
 
-        <button className="rounded-xl bg-cyan-300 px-8 py-4 font-semibold text-black">
-          Launch Demo
-        </button>
+        <PrimaryButton
+        title="Launch Demo"
+        />
 
         <button className="rounded-xl border border-cyan-300 px-8 py-4">
           Case Study

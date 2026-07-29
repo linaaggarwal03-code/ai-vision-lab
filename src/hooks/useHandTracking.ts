@@ -1,39 +1,52 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect , useState } from "react";
 import Webcam from "react-webcam";
 import { createHandLandmarker } from "@/lib/mediapipe";
 
 export function useHandTracking(
   webcamRef: React.RefObject<Webcam | null>
 ) {
+  const [landmarks, setLandmarks] = useState<any[]>([]);
+  const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+
   useEffect(() => {
-    let animationFrameId: number;
+    let animationFrameId = 0;
+    let handLandmarker: Awaited<ReturnType<typeof createHandLandmarker>>;
 
     async function startTracking() {
-      const handLandmarker = await createHandLandmarker();
+      handLandmarker = await createHandLandmarker();
 
       function detect() {
-        const video = webcamRef.current?.video;
+        const currentVideo = webcamRef.current?.video;
+
+        if (!currentVideo) {
+            animationFrameId = requestAnimationFrame(detect);
+            return;
+}
 
         if (
-          video &&
-          video.readyState === 4
-        ) {
+          currentVideo.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA
+        ){
+          setVideo(currentVideo);
           const results = handLandmarker.detectForVideo(
-            video,
+            currentVideo,
             performance.now()
           );
 
+          // Only log when a hand first appears (temporary debugging)
           if (results.landmarks.length > 0) {
-            console.log("✋ Hand Detected!", results);
-}
+            setLandmarks(results.landmarks);
           }
+          else {
+            setLandmarks([]);
+          }
+        }
 
         animationFrameId = requestAnimationFrame(detect);
       }
 
-      detect();
+        animationFrameId = requestAnimationFrame(detect);
     }
 
     startTracking();
@@ -41,5 +54,11 @@ export function useHandTracking(
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [webcamRef]);
+  }, 
+  [webcamRef]);
+
+  return {
+    landmarks,
+    video,
+};
 }
