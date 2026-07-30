@@ -2,12 +2,15 @@
 
 import { useEffect , useState } from "react";
 import Webcam from "react-webcam";
-import { createHandLandmarker } from "@/lib/mediapipe";
+import {
+  createHandLandmarker,
+  HandLandmarkerResult,
+} from "@/lib/mediapipe";
 
 export function useHandTracking(
   webcamRef: React.RefObject<Webcam | null>
 ) {
-  const [landmarks, setLandmarks] = useState<any[]>([]);
+  const [landmarks, setLandmarks] = useState<HandLandmarkerResult["landmarks"]>([]);
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
 
   useEffect(() => {

@@ -21,7 +21,10 @@ export default function CameraPanel() {
           mirrored
           className="h-full w-full object-cover"
         />
-        <LandmarkCanvas landmarks={landmarks} />
+        <LandmarkCanvas
+          landmarks={landmarks}
+          video={video}
+        />
       </div>
     </section>
   );

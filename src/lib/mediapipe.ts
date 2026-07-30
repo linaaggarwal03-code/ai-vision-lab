@@ -1,6 +1,7 @@
 import {
   FilesetResolver,
   HandLandmarker,
+  HandLandmarkerResult,
 } from "@mediapipe/tasks-vision";
 
 export async function createHandLandmarker() {
@@ -21,3 +22,4 @@ export async function createHandLandmarker() {
 );  
 return handLandmarker;
 }
+export type { HandLandmarkerResult };
